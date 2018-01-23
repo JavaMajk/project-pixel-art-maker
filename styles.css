@@ -58,10 +58,6 @@ p {
     color: lightgray;
 }
 
-.info {
-    color: pink important;
-}
-
 .btn {
     background-color: #0265cc;
     transition: all 300ms ease-in-out;
@@ -143,7 +139,7 @@ input[type="submit"] {
 /*HEADER*/
 
 .header {
-    height: 820px;
+    height: 860px;
     width: 100%;
     padding: 160px 0 30px;
     background-image: url(http://livingworditd.org/wp-content/uploads/2014/08/dark-texture-abstract-hd-wallpaper-1920x1080-2400.jpg);
