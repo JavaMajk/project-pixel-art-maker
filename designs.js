@@ -33,15 +33,33 @@ $(document).ready(function () {
     }
 
     //Click once tho change cell color
-    table.on("click", "td", function () {
+    table.on("mousedown", "td", function () {
         $(this).css("background-color", colorPicker.val());
     });
 
     //Color cells with left mouse pressed down, or erase cells with middle-mouse button pressed down or Shift and mouseover
-    table.on("mouseover", "td", function (event) {
-        if (event.which == 1) {
+    table.on("mouseover", "td", function (e) {
+        if (!e.which && e.button) { // if no which, but button (IE8-)
+            if (e.button & 1)
+                e.which = 1; // left
+            else if (e.button & 4)
+                e.which = 2; // middle
+            else if (e.button & 2)
+                e.which = 3; // right
+        }
+
+        if (e.buttons) { //if there's buttons, i set new option buttondown (Firefox)
+            if (e.buttons & 1)
+                e.buttondown = 1; // left
+            else if (e.buttons & 4)
+                e.buttondown = 2; // middle
+            else if (e.buttons & 2)
+                e.buttondown = 3; // right
+        }
+
+        if (e.buttondown == 1) {
             $(this).css("background-color", colorPicker.val());
-        } else if (event.shiftKey || event.which == 2) {
+        } else if (e.shiftKey || e.buttondown == 2) {
             $(this).css("background-color", "");
         }
     });
