@@ -36,33 +36,35 @@ $(document).ready(function () {
     table.on("mousedown", "td", function () {
         $(this).css("background-color", colorPicker.val());
     });
-
-    //Color cells with left mouse pressed down, or erase cells with middle-mouse button pressed down or Shift and mouseover
-    table.on("mouseover", "td", function (e) {
-        if (!e.which && e.button) { // if no which, but button (IE8-)
-            if (e.button & 1)
-                e.which = 1; // left
-            else if (e.button & 4)
-                e.which = 2; // middle
-            else if (e.button & 2)
-                e.which = 3; // right
-        }
-
-        if (e.buttons) { //if there's buttons, i set new option buttondown (Firefox)
-            if (e.buttons & 1)
-                e.buttondown = 1; // left
-            else if (e.buttons & 4)
-                e.buttondown = 2; // middle
-            else if (e.buttons & 2)
-                e.buttondown = 3; // right
-        }
-
-        if (e.buttondown == 1) {
-            $(this).css("background-color", colorPicker.val());
-        } else if (e.shiftKey || e.buttondown == 2) {
-            $(this).css("background-color", "");
-        }
+    //Prevent default right click action so right click can be used to erase
+    table.on('contextmenu', 'td', function (e) {
+        e.preventDefault();
+        $(this).css("background-color", "");
     });
+    //Prevent default action of dragging so the painted image is not dragged
+    table.on('dragstart', 'td', function (e) {
+        e.preventDefault();
+    });
+    //Check if the browser is Safari
+    if (navigator.userAgent.search("Safari") >= 0) {
+        //If it is Safari then use e.which to listen to mouse. Color cells with left mouse pressed down, or erase cells with right-mouse button pressed down or Shift and mouseover
+        table.on("mouseover", "td", function (e) {
+            if (e.which === 1) {
+                $(this).css("background-color", colorPicker.val());
+            } else if (e.shiftKey || e.which === 3) {
+                $(this).css("background-color", "");
+            }
+        });
+    } else {
+        //If it is not Safari then use e.buttons to listen to mouse. Color cells with left mouse pressed down, or erase cells with right-mouse button pressed down or Shift and mouseover
+        table.on("mouseover", "td", function (e) {
+            if (e.buttons === 1) {
+                $(this).css("background-color", colorPicker.val());
+            } else if (e.shiftKey || e.buttons === 2) {
+                $(this).css("background-color", "");
+            }
+        });
+    }
 
     //WOW Animations
     new WOW().init();
